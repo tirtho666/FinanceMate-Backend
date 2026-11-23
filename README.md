@@ -51,7 +51,7 @@ The source code inside `src/` is organized by responsibility:
 
 1. **Clone the repository:**
    ```bash
-  git clone https://github.com/tirtho666/FinanceMate-Backend.git
+   git clone [https://github.com/tirtho666/FinanceMate-Backend.git](https://github.com/tirtho666/FinanceMate-Backend.git)
    cd FinanceMate-Backend
    ```
 
