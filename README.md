@@ -1,20 +1,72 @@
-# FinanceMate Backend API
+# FinanceMate Backend
 
-A modular, production-ready RESTful backend service for the **FinanceMate** mobile application, built with Node.js, Express, and PostgreSQL following **Clean Architecture** principles.
+REST API service powering the **FinanceMate** mobile application. Built with Node.js, Express, and PostgreSQL, the backend handles user authentication, profile management, transaction CRUD operations, and financial summary calculations using a clean, layered architecture.
+
+- **Mobile App (Frontend):** [github.com/tirtho666/FinanceMate](https://github.com/tirtho666/FinanceMate)
+- **Live Base URL:** `https://financemate-backend.onrender.com`
 
 ## Tech Stack
+
 - **Runtime & Framework:** Node.js, Express.js
-- **Database:** PostgreSQL (Hosted on Neon)
-- **Authentication & Security:** JWT (JSON Web Tokens), `bcryptjs` password hashing
-- **Architecture:** Clean Architecture (`routes`, `controllers`, `repositories`, `middlewares`, `config`)
+- **Database:** PostgreSQL (hosted on Neon)
+- **Authentication & Security:** JSON Web Tokens (30-day expiry), `bcryptjs` password hashing
+- **Hosting:** Render
+
+## Project Structure
+
+The source code inside `src/` is organized by responsibility:
+
+- **`config/`** — Environment variables and PostgreSQL connection pool setup
+- **`middlewares/`** — JWT verification, request validation, and centralized error handling
+- **`routes/`** — Express route definitions for auth, users, and transactions
+- **`controllers/`** — HTTP request parsing and response formatting
+- **`repositories/`** — Parameterized SQL queries and database interactions
 
 ## API Endpoints
-- `GET /api/health` — Verify server and database status
-- `POST /api/auth/signup` — Register a new user account
-- `POST /api/auth/login` — Authenticate user and receive a 30-day JWT
-- `GET /api/users/profile` — Get logged-in user details (Protected)
-- `PUT /api/users/profile` — Update user name, phone, or photo URL (Protected)
-- `PUT /api/users/change-password` — Securely update password (Protected)
-- `POST /api/transactions` — Record a new income or expense (Protected)
-- `GET /api/transactions` — Fetch transactions with optional filters (`?month=this`, `?month=last`, `?category=Name`) (Protected)
-- `GET /api/transactions/summary` — Get current balance, total income, and total expense (Protected)
+
+### Health & Authentication
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/health` | Public | Check server and database connectivity |
+| `POST` | `/api/auth/signup` | Public | Create a new user account |
+| `POST` | `/api/auth/login` | Public | Authenticate user and return a 30-day JWT |
+
+### User Profile
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/users/profile` | Bearer Token | Fetch authenticated user details |
+| `PUT` | `/api/users/profile` | Bearer Token | Update user name, phone number, or photo URL |
+| `PUT` | `/api/users/change-password` | Bearer Token | Change account password |
+
+### Transactions & Summary
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/transactions` | Bearer Token | Record a new income or expense |
+| `GET` | `/api/transactions` | Bearer Token | List transactions (supports date range and category filters) |
+| `PUT` | `/api/transactions/:id` | Bearer Token | Update an existing transaction |
+| `DELETE` | `/api/transactions/:id` | Bearer Token | Delete a transaction by ID |
+| `GET` | `/api/transactions/summary` | Bearer Token | Calculate current balance, total income, and total expense |
+
+## Local Setup
+
+1. **Clone the repository:**
+   ```bash
+  git clone https://github.com/tirtho666/FinanceMate-Backend.git
+   cd FinanceMate-Backend
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables:**
+   Copy `.env.example` to `.env` and fill in your PostgreSQL connection string and JWT secret:
+   ```bash
+   cp .env.example .env
+   ```
+
+4. **Start the server:**
+   ```bash
+   npm start
+   ```
