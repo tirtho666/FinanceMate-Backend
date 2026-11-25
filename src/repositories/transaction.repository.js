@@ -39,6 +39,17 @@ const findByUserId = async (userId, { month, category } = {}) => {
   return rows;
 };
 
+const deleteTransaction = async (userId, id) => {
+  const { rows } = await pool.query(
+    `DELETE FROM transactions
+     WHERE id = $1 AND user_id = $2
+     RETURNING id`,
+    [id, userId]
+  );
+
+  return rows[0] || null;
+};
+
 const getSummary = async (userId) => {
   const { rows } = await pool.query(
     `SELECT
@@ -58,4 +69,9 @@ const getSummary = async (userId) => {
   };
 };
 
-module.exports = { createTransaction, findByUserId, getSummary };
+module.exports = {
+  createTransaction,
+  findByUserId,
+  deleteTransaction,
+  getSummary,
+};

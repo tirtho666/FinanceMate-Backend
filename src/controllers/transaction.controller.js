@@ -65,6 +65,35 @@ const getTransactions = async (req, res, next) => {
   }
 };
 
+const deleteTransaction = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!id || !Number.isInteger(Number(id))) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'A valid transaction id is required',
+      });
+    }
+
+    const deleted = await transactionRepository.deleteTransaction(
+      req.user.id,
+      id
+    );
+
+    if (!deleted) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Transaction not found',
+      });
+    }
+
+    return res.status(200).json({ status: 'success', data: { id: deleted.id } });
+  } catch (err) {
+    return next(err);
+  }
+};
+
 const getSummary = async (req, res, next) => {
   try {
     const summary = await transactionRepository.getSummary(req.user.id);
@@ -74,4 +103,9 @@ const getSummary = async (req, res, next) => {
   }
 };
 
-module.exports = { createTransaction, getTransactions, getSummary };
+module.exports = {
+  createTransaction,
+  getTransactions,
+  deleteTransaction,
+  getSummary,
+};
